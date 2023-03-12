@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use mysql_xdevapi\Exception;
+use PhpParser\Node\Expr\AssignOp\Mod;
 
 trait OrderOperations
 {
@@ -93,7 +94,7 @@ trait OrderOperations
                     if ($distance >= 5000) continue;
                     else
                         $this->push_notification_android($captain->FCMToken, $message);
-                    Notification::create(['captain_id' => $captain->id, 'message' => $message]);
+                    Notification::create(['captain_id' => $captain->id,'order_id' =>$order->id ,'message' => $message]);
                 }
             }
             DB::commit();
@@ -103,6 +104,17 @@ trait OrderOperations
             DB::rollback();
         }
     }
+    public function pushForNotifyOrderCancel(Order $order)
+    {
+        $allCaptainReceivedNotification = $order->notifications()->with("captain")->get()->pluck('captain')->unique('id')->values();
+        foreach ($allCaptainReceivedNotification as $captain)
+        {
+            $message = "hello {$captain->name} Order is location in {$order->location},it has been Canceled ";
+            $this->push_notification_android($captain->FCMToken, $message);
+            Notification::create(['captain_id' => $captain->id,'order_id' =>$order->id ,'message' => $message]);
 
+        }
+        return true;
+    }
 
 }

@@ -33,6 +33,18 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
+    public function distance1(){
+        return $this->distance(22.244, 20.222 , 22.222 , 20.222);
+    }
+
+    public function orderCancel(Order $order)
+    {
+        $order->update(['status' => 2]);
+        $this->pushForNotifyOrderCancel($order);
+        return response()->json("order is canceled" , 200);
+
+    }
+
 
 
 }

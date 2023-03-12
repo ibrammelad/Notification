@@ -10,6 +10,10 @@ class Order extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class );
+    }
     public function scopeTotal()
     {
         return $this->paginate(10);

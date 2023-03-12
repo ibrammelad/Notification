@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('message');
             $table->unsignedBigInteger('captain_id');
+            $table->unsignedBigInteger('order_id');
             $table->foreign('captain_id')->on('captains')->references('id')->onDelete('cascade');
+            $table->foreign('order_id')->on('orders')->references('id')->onDelete('cascade');
             $table->timestamps();
         });
     }

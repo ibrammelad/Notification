@@ -29,5 +29,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::controller(\App\Http\Controllers\OrderController::class)->group(function () {
             Route::get('/orders', 'showOrders');
             Route::post('/orders', 'createOrder');
+            Route::post('/orderCancel/{order}', 'orderCancel');
             Route::get('/distance', 'distance1');
         });
